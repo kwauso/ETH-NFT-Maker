@@ -9,6 +9,7 @@
     ]
   },
   "scripts": {
+    "start": "yarn client start",
     "contract": "yarn workspace contract",
     "client": "yarn workspace client",
     "test": "yarn workspace contract test"
