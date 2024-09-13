@@ -3,6 +3,9 @@ import React from "react";
 import ImageLogo from "./image.svg";
 import "./NftUploader.css";
 import {useEffect, useState} from "react";
+import ethers from "ethers";
+import Web3Mint from "../../utils/Web3Mint.json";
+import {Web3Storage} from "web3.storage";
 
 const NftUploader = () => {
     /*
@@ -43,7 +46,34 @@ const NftUploader = () => {
         } catch (err) {
             console.error(err);
         }
+        const askContractToMintNft = async (ipfs) => {
+            const CONTRACT_ADDRESS = "0x5FbDB2315678afecb367f032d93F642f64180aa3"
+            try {
+                const { ethereum } = window;
+                if (ethereum) {
+                    const provider = new ethers.providers.Web3Provider(ethereum);
+                    const signer = provider.getSigner();
+                    const connectedContract = new ethers.Contract(
+                        CONTRACT_ADDRESS,
+                        Web3Mint.abi,
+                        signer
+                    );
+                    console.log("Going to pop wallet now to pay gas...");
+                    let nftTxn = await connectedContract.mintIpfsNFT("sample",ipfs);
+                    console.log("Mining...please wait.");
+                    await nftTxn.wait();
+                    console.log(
+                        `Mined, see transaction: https://goerli.etherscan.io/tx/${nftTxn.hash}`
+                    );
+                } else {
+                    console.log("Ethereum object doesn't exist!");
+                }
+            } catch (error) {
+                console.log(error);
+            }
+        };
     };
+
     const renderNotConnectedContainer = () => (
         <button onClick={connectWallet} className="cta-button connect-wallet-button">
             Connect to Wallet
@@ -62,6 +92,21 @@ const NftUploader = () => {
         checkIfWalletIsConnected();
     }, []);
 
+const imageToNFT = async (e) => {
+    const client = new Web3Storage({ token: API_KEY })
+    const image = e.target
+    console.log(image)
+    const rootCid = await client.put(image.files, {
+        name: 'experiment',
+        maxRetries: 3
+    })
+    const res = await client.get(rootCid) // Web3Response
+    const files = await res.files() // Web3File[]
+    for (const file of files) {
+        console.log("file.cid:",file.cid)
+        askContractToMintNft(file.cid)
+    }
+}
 
   return (
     <div className="outerBox">
@@ -85,6 +130,7 @@ const NftUploader = () => {
           name="imageURL"
           type="file"
           accept=".jpg , .jpeg , .png"
+          onChange={imageToNFT}
         />
       </div>
       <p>または</p>
@@ -94,6 +140,7 @@ const NftUploader = () => {
           className="nftUploadInput"
           type="file"
           accept=".jpg , .jpeg , .png"
+          onChange={imageToNFT}
         />
       </Button>
     </div>
