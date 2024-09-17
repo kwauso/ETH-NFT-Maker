@@ -8,10 +8,11 @@ import Web3Mint from "../../utils/Web3Mint.json";
 import {Web3Storage} from "web3.storage";
 import {PinataSDK} from "pinata-web3";
 import lighthouse from "@lighthouse-web3/sdk";
-import {LIGHT_HOUSE_API_KEY, PINATA_API_KEY, PINATA_JWT, PINATA_GATEWAY} from "./.config.ts";
+//import {LIGHT_HOUSE_API_KEY, PINATA_API_KEY, PINATA_JWT, PINATA_GATEWAY} from "./.config.ts";
 //import fs from "fs";
 const ethers = require("ethers");
 const Web3MintABI = Web3Mint.abi;
+const LIGHT_HOUSE_API_KEY = "61a87062.5fb2330b856f45eba664b6450f7209a9";
 
 const NftUploader = () => {
     /*
