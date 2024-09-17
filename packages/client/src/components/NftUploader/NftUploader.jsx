@@ -11,6 +11,7 @@ import lighthouse from "@lighthouse-web3/sdk";
 import {LIGHT_HOUSE_API_KEY, PINATA_API_KEY, PINATA_JWT, PINATA_GATEWAY} from "./.config.ts";
 //import fs from "fs";
 const ethers = require("ethers");
+const Web3MintABI = Web3Mint.abi;
 
 const NftUploader = () => {
     /*
@@ -64,7 +65,7 @@ const NftUploader = () => {
                 const signer = await provider.getSigner();
                 const connectedContract = new ethers.Contract(
                     CONTRACT_ADDRESS,
-                    Web3Mint,
+                    Web3MintABI,
                     signer
                 );
                 console.log("Going to pop wallet now to pay gas...");
@@ -124,9 +125,11 @@ const NftUploader = () => {
         //await fs.writeFileSync(`/images/${image}`, image);
         const output = await lighthouse.upload(image, LIGHT_HOUSE_API_KEY, null, progressCallback)
         console.log('File Status:', output)
+        const hash = output.data.Hash
+        console.log(hash)
 
-        const imageURL = window.URL.createObjectURL(image);
-        setPreview(imageURL);
+        //const imageURL = window.URL.createObjectURL(image);
+        //setPreview(imageURL);
 
         console.log(e);
         //const file = new File(["test"], image, {type: "image/png"});
@@ -139,7 +142,7 @@ const NftUploader = () => {
 
         //const res = await pinata.gateways.get(IpfsHash);
         //console.log(res);
-        //askContractToMintNft(res);
+        await askContractToMintNft(hash);
     }
 
   return (
@@ -155,7 +158,7 @@ const NftUploader = () => {
       </div>
       <div className="nftUplodeBox">
         <div className="imageLogoAndText">
-          <img src={preview} alt="imagelogo" />
+          <img src={ImageLogo} alt="imagelogo" />
           <p>ここにドラッグ＆ドロップしてね</p>
         </div>
         <input
