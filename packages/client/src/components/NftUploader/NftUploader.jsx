@@ -12,7 +12,7 @@ import lighthouse from "@lighthouse-web3/sdk";
 //import fs from "fs";
 const ethers = require("ethers");
 const Web3MintABI = Web3Mint.abi;
-const LIGHT_HOUSE_API_KEY = "61a87062.5fb2330b856f45eba664b6450f7209a9";
+//const LIGHT_HOUSE_API_KEY = "61a87062.5fb2330b856f45eba664b6450f7209a9";
 
 const NftUploader = () => {
     /*
@@ -124,7 +124,7 @@ const NftUploader = () => {
         //const uploadRes = await lighthouse.upload(`${image}`, LIGHT_HOUSE_API_KEY);
         //console.log(uploadRes);
         //await fs.writeFileSync(`/images/${image}`, image);
-        const output = await lighthouse.upload(image, LIGHT_HOUSE_API_KEY, null, progressCallback)
+        const output = await lighthouse.upload(image, process.env["LIGHT_HOUSE_API_KEY "], null, progressCallback)
         console.log('File Status:', output)
         const hash = output.data.Hash
         console.log(hash)
