@@ -5,7 +5,7 @@ import "./NftUploader.css";
 import {useEffect, useState} from "react";
 import Web3Mint from "../../utils/Web3Mint.json";
 import lighthouse from "@lighthouse-web3/sdk";
-import {LIGHT_HOUSE_API_KEY} from "./.config.ts";
+//import {LIGHT_HOUSE_API_KEY} from "./.config.ts";
 const ethers = require("ethers");
 const Web3MintABI = Web3Mint.abi;
 
@@ -98,7 +98,7 @@ const NftUploader = () => {
             console.log(percentageDone)
         }
 
-        const output = await lighthouse.upload(image, LIGHT_HOUSE_API_KEY, null, progressCallback)
+        const output = await lighthouse.upload(image, process.env.LIGHT_HOUSE_API_KEY, null, progressCallback)
         console.log('File Status:', output)
         const hash = output.data.Hash
         console.log(hash)
